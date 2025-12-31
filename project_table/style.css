@@ -38,6 +38,11 @@ header{
     border-radius: 6px;
     padding: 11px 16px 11px 12px;
     font-size: large;
+    transition: transform 0.3s;
+}
+button:hover{
+    cursor: pointer;
+    transform: scale(1.1);
 }
 
 table{
