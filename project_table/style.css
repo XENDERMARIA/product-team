@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat';
+}
+body,html{
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.main-div{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.left-image{
+   padding: 12px;
+    background-color: rgba(235, 245, 255, 1);
+}
+.left-headings{
+    padding: 16px;
+}
+.btn{
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    border: none;
+    background-color: rgba(0, 134, 255, 1);
+    border-radius: 6px;
+    padding: 11px 16px 11px 12px;
+    font-size: large;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 24px;
+}
+thead {
+  background: rgba(255, 255, 255, 1);
+}
+
+th, td {
+  padding: 12px;
+  border-top: 1px solid rgb(57, 57, 57);
+  border-bottom: 1px solid  rgb(57, 57, 57);
+  text-align: left;
+}
+
+
+th {
+  font-weight: 500;
+  font-size: 12px;
+  color: rgba(47, 47, 47, 1);
+}
+
+td{
+    font-weight: 600;
+    font-size: 12px;
+    color: rgba(0, 134, 255, 1);
+}
+
+th:first-child, td:first-child {
+  border-left: 1px solid rgb(57, 57, 57);
+}
+th:last-child, td:last-child {
+  border-right: 1px solid rgb(57, 57, 57);
+}
+.address-dropdown {
+  width: 130px;
+  font-size: 10px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background: white;
+  color: rgba(0, 134, 255, 1);
+}
