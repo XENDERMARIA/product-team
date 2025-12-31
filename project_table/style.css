@@ -91,3 +91,59 @@ th:last-child, td:last-child {
   background: white;
   color: rgba(0, 134, 255, 1);
 }
+.box{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+}
+.box-1{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    background-color: rgba(18, 77, 155, 1);
+    color: white;
+}
+.box-2{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    background-color:rgba(254, 161, 17, 1);
+    color: white;
+}
+.box-3{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    background-color: rgba(0, 134, 255, 1);
+    color: white;
+}
+.box-4{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    background-color: rgba(46, 190, 121, 1);
+    color: white;
+}
+.box-5{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    background-color: rgba(206, 44, 132, 1);
+    color: white;
+}
