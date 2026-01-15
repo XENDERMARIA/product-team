@@ -1,0 +1,148 @@
+Here is a detailed explanation of the code, organized into a Markdown file for future reference. It explains the key components, state management, API calls, stepper functionality, and button flows.````markdown name=AddVirtualMachineSet-Deep-Explanation.md
+# AddVirtualMachineSet Component - Deep Explanation
+
+This document describes the `AddVirtualMachineSet` component, focusing on its purpose, key functions, and user-interaction flow. The goal is to provide a detailed breakdown so it can be maintained and extended easily.
+
+---
+
+## Overview
+
+The `AddVirtualMachineSet` component handles the user interaction for creating a **VM Group** and adding virtual machines (VMs) to it. It is structured in a **wizard flow** with two steps:
+1. **Create VM Group** – Define the group name and environment restrictions.
+2. **Add VMs** – Populate the group with VMs one-by-one or using a CSV.
+
+---
+
+## Component Structure
+
+### **1. State Management with Hooks**
+
+This component manages UI and data-fetching through `useState` and handles lifecycle logic via `useEffect`.
+
+#### Key State Variables:
+| State Variable                | Purpose                                                                                   |
+|-------------------------------|-------------------------------------------------------------------------------------------|
+| `state.data`                  | Holds the form data for creating/updating a VM Group and VM details.                      |
+| `state.error`                 | Tracks form validation errors or API error messages.                                      |
+| `state.selectedTab`           | Indicates the current step (Step 1 = 1, Step 2 = 2).                                      |
+| `state.master_envs_list`      | List of all available environments for the dropdown selection.                            |
+| `state.selectedMasterEnv`     | Selected environments for restriction in the VM group.                                    |
+| `state.vm_arr`                | Holds the list of VMs in the group.                                                       |
+| `state.loading_vms`           | A loading flag for fetching the VM list.                                                  |
+| `state.show_save_button`      | Toggles visibility of the "Save" button for Step 2.                                       |
+| `state.parent_state`          | Stores the created VM Group details after submission.                                     |
+
+### **2. Main Functions**
+
+#### **Data Fetchers**
+
+| Function                                | Purpose                                                                                 |
+|-----------------------------------------|-----------------------------------------------------------------------------------------|
+| `fetchMasterEnvList`                    | Fetches all possible master environments to display in the dropdown.                    |
+| `fetchVMGroupDataAndSetState`           | Retrieves information about the VM Group (for editing an existing one).                 |
+| `fetchVmGroups`                         | Fetches the list of VMs in a VM Group (called in Step 2).                               |
+| `fetchSelectedVMData`                   | Gets details of a specific VM (triggered via Edit action).                              |
+
+#### **Validation and Save Functions**
+
+| Function               | Purpose                                                                              |
+|------------------------|--------------------------------------------------------------------------------------|
+| `validateAndSaveData`  | Validates and submits data for **Step 1** (creating/updating the VM group).          |
+| `validateAndSaveFileData` | Uploads a CSV file and handles saving for Step 2’s bulk VM creation.             |
+
+#### **Dialog and Popover Handlers**
+
+| Function                        | Purpose                                                                                   |
+|---------------------------------|-------------------------------------------------------------------------------------------|
+| `handleClickOpen`               | Opens the dialog to add or edit a VM.                                                     |
+| `setDataforEdit`                | Preloads data into the VM editor modal.                                                   |
+| `handleClickSSHKeyDialog`       | Opens the SSH key management dialog.                                                      |
+
+---
+
+## User Flow
+
+### **Step 1: Create VM Group**
+
+#### **Components Involved**
+1. `Input` – Form field for group name.
+2. **Dropdown**: `MasterEnvDropdown` to select environment restrictions.
+
+#### **How It Works**:
+1. User fills the `Virtual Machine Group Name` and selects environments.
+2. Clicks `Save & Continue`.
+3. `validateAndSaveData` checks inputs:
+   - Validation Errors → Show red inline messages.
+   - On Success → Calls API (`PostData`) to save the group.
+4. The state (`state.parent_state`) is updated with the new VM Group, and the view advances to Step 2.
+
+---
+
+### **Step 2: Add Virtual Machines**
+
+#### **Options for Adding VMs:**
+1. **Manually**:
+   - Click "Add Virtual Machine".
+   - Fills details in `AddSingleVMDialog`.
+   - Submits → `validateAndSaveData` calls the backend to persist.
+
+2. **Bulk Upload**:
+   - Uploads CSV via `AddVirtualMachineCSV`.
+   - Backend processes file and returns new VM entries.
+
+3. **Actions on each VM row**:
+   - **Test** → Sends an API call to check VM status.
+   - **Edit** → Opens the data in the VM editor dialog.
+   - **Delete** → Removes the VM from the group and updates the list.
+
+---
+
+## Buttons and Their Functions
+
+| Button                    | Function                                 | Description                                                  |
+|---------------------------|------------------------------------------|--------------------------------------------------------------|
+| Save & Continue (Step 1)  | `validateAndSaveData`                   | Validates input and creates/updates the VM group.            |
+| Add More                  | `handleClickOpen`                       | Opens dialog to add a single VM.                             |
+| Upload CSV File           | `setOpenCSVDialog(true)`               | Opens a modal to upload the CSV file into Step 2.            |
+| Done                      | Direct navigation                       | Finishes wizard and redirects to VM Group list.              |
+
+---
+
+## Advanced Concepts
+
+### **Dialog Flows**
+1. `AddSingleVMDialog` opens for a single VM:
+   - Input fields are mapped to `state.data`.
+   - Submitting triggers data validation → backend API call → updates VM List upon success.
+
+### **Error Handling**
+- Inline validation per field (`state.error` flags).
+- Toast messages for backend errors (via `showErrorHandlerUpdated` and `showSnackbar`).
+
+### **APIs Interaction**
+| Purpose                        | Method | Endpoint                               | Notes                                          |
+|--------------------------------|--------|---------------------------------------|------------------------------------------------|
+| Fetch Master Envs              | GET    | `properties.api.master_envs`          | Loads dropdown for Step 1.                    |
+| Save VM Group                  | POST   | `properties.api.create_vm_group` or `edit_vm_group` | For either create/update.       |
+| Fetch VM List                  | GET    | `properties.api.edit_vm_group + vm_sets=true` | Handles Step 2's VM table.        |
+
+---
+
+### **Stepper Navigation**
+
+| Step            | Navigation Trigger            | Next View                         |
+|------------------|-------------------------------|------------------------------------|
+| Step 1 → Step 2 | Successful group save (`validateAndSaveData`) | Loads VM list and Step 2 view.    |
+| Step 2 → End    | Clicks `Done`                 | Redirects to VM Group list page.  |
+
+---
+
+## Code Notes
+
+1. **Dynamic Updates:** Each part of the UI (group name, environment dropdowns, VM table) is driven by `state`, so updates trigger automatic re-rendering.
+2. **Error Feedback:** The app ensures validation errors show on the relevant fields and API successes/errors display as toast/snackbars.
+
+---
+
+This document is a guide to understand `AddVirtualMachineSet`. Updating or debugging should be easier with the architecture outlined here.
+````
